@@ -8,17 +8,21 @@ def add_province(name, pops, goods, neighbors):
 
 
 class Pop:
-    def __init__(self, name):
+    def __init__(self, name, count):
         self.name = name
+        self.count = int(count)
 
 
 class Province:
     def __init__(self, name, pops, goods, neighbors):
         self.name = str(name)
         self.prov_id = len(provinces)
+        self.pop_count = 0
 
         if isinstance(pops, list):
             self.pops = pops
+            for pop in pops:
+                self.pop_count += pop.count
         else:
             raise TypeError("Province init pop not list")
 
@@ -34,7 +38,27 @@ class Province:
 
         provinces.append(self)
 
+    def add_pop(self, pop):
+        self.pops.append(pop)
+        self.pop_count += pop.count
+
     def __str__(self):
+        """
+
+        | Province Name | Province ID | Province Pop Count | Province Neighbor Count |
+
+        :return: above
+        """
+
+        s = "| " + self.name.ljust(13) + " | " + str(self.prov_id).zfill(7) + " | " + str(self.pop_count).zfill(9)
+        s = s + " | " + str(len(self.neighbors)).zfill(2).rjust(9) + " |"
+
+        return s
+
+        # return "Province " + self.name + ", prov_id " + str(self.prov_id) + "\nPops: " + str(self.pops) + \
+        #        "\nGoods: " + str(self.goods) + "\nNeighbors: " + str(self.neighbors)
+
+    def __repr__(self):
         return "Province " + self.name + ", prov_id " + str(self.prov_id) + "\nPops: " + str(self.pops) + \
                "\nGoods: " + str(self.goods) + "\nNeighbors: " + str(self.neighbors)
 
