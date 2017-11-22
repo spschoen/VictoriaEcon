@@ -1,10 +1,27 @@
 provinces = []
 
 
-def add_province(name, pops, goods, neighbors):
-    prov = Province(name, pops, goods, neighbors)
-    provinces.append(prov)
-    return prov
+class Map:
+    def __init__(self):
+        self.provinces = []
+
+    def add_province(self, name, pops, goods, neighbors):
+        prov = Province(name, pops, goods, neighbors)
+        self.provinces.append(prov)
+
+        for neighbor in neighbors:
+            neighbor.add_neighbor(self)
+
+        return prov
+
+    def get_province(self, index):
+        if index > len(self.provinces) or index < 0:
+            raise IndexError("Requested index out of bounds.")
+        else:
+            return self.provinces[index]
+
+    def tick(self):
+        pass
 
 
 class Pop:
@@ -41,6 +58,9 @@ class Province:
     def add_pop(self, pop):
         self.pops.append(pop)
         self.pop_count += pop.count
+
+    def add_neighbor(self, neighbor):
+        self.neighbors.append(neighbor)
 
     def __str__(self):
         """
